@@ -27,8 +27,6 @@ else
 leap_year = false
 end
 
-
-
 while i < month 
 serial_number = serial_number + arr[i-1]
 if i == 2 && leap_year == true
