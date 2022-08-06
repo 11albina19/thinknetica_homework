@@ -1,5 +1,8 @@
+puts 'Введите число: '
 number = gets.chomp.to_i
+puts 'Введите месяц: '
 month  = gets.chomp.to_i
+puts 'Введите год: '
 year   = gets.chomp.to_i
 
 months = {'January' => 31, 'February' => 28, 'March' => 31, 'April' => 30, 'May' => 31, 'June' => 30, 
