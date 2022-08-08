@@ -10,8 +10,8 @@ while true
   price  = gets.chomp.to_i
   puts 'Введите количество купленного товара: '
   amount   = gets.chomp.to_f
-  hash_date = {'price':price, 'amount':amount, 'summ': price*amount}
-  sum_total = sum_total + price*amount
+  hash_date = { 'price':price, 'amount':amount, 'summ': price * amount }
+  sum_total = sum_total + price * amount
   hash_product[name_:] = hash_date
 end
 

@@ -4,7 +4,7 @@ hash     = {}
 
 for index in vowel
   i = alphabet.find_index(index)
-  hash[index] = i+1
+  hash[index] = i + 1
 end
 
 puts hash
