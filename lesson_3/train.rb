@@ -40,17 +40,17 @@ class Train
 
 #предыдущая станция
 def station_previous()
-  @route.stations[index_station-1]
+  @route.stations[@index_station-1]
 end
 
 #текущая станция
 def station_current()
-  @route.stations[index_station]
+  @route.stations[@index_station]
 end
 
 #следующая станция
 def station_next()
-  @route.stations[index_station+1]
+  @route.stations[@index_station+1]
 end
 
 #переместиться вперед
