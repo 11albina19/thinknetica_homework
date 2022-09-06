@@ -38,37 +38,37 @@ class Train
     station.to_accept_train(self)
   end
 
-#предыдущая станция
-def station_previous()
-  @route.stations[@index_station-1]
-end
+  #предыдущая станция
+  def station_previous()
+    @route.stations[@index_station-1]
+  end
 
-#текущая станция
-def station_current()
-  @route.stations[@index_station]
-end
+  #текущая станция
+  def station_current()
+    @route.stations[@index_station]
+  end
 
-#следующая станция
-def station_next()
-  @route.stations[@index_station+1]
-end
+  #следующая станция
+  def station_next()
+    @route.stations[@index_station+1]
+  end
 
-#переместиться вперед
-def forward()
-  current_st = self.station_current()
-  next_st = self.station_next()
+  #переместиться вперед
+  def forward()
+    current_st = self.station_current()
+    next_st = self.station_next()
 
-  current_st.send_train (self)
-  next_st.to_accept_train (self)
-end
+    current_st.send_train (self)
+    next_st.to_accept_train (self)
+  end
 
-#переместиться назад
-def back()
-  current_st = self.station_current()
-  previous_st = self.station_previous()
+  #переместиться назад
+  def back()
+    current_st = self.station_current()
+    previous_st = self.station_previous()
 
-  current_st.send_train (self)
-  previous_st.to_accept_train (self)
-end
+    current_st.send_train (self)
+    previous_st.to_accept_train (self)
+  end
 
 end
