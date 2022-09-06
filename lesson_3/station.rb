@@ -1,14 +1,12 @@
 class Station
+  attr_reader :train_array, :name
 
-  attr_reader :train_array
-  attr_reader :name
-
-  def initialize (name)
+  def initialize(name)
     @name        = name
     @train_array = []
   end
   
-  def to_accept_train (train)
+  def to_accept_train(train)
     puts('На станцию  ' + self.name + ' прибыл поезд ' + train.room.to_s)
     @train_array << train
   end
@@ -31,7 +29,7 @@ class Station
     puts('Количество пассажирских: ' + quantity_p.to_s + " , количество грузовых: " + quantity_c.to_s)
   end
 
-  def send_train (train)
+  def send_train(train)
     puts('Со станции ' + self.name + ' отправляется поезд: ' + train.room.to_s)
     #@train_array - [train]
     @train_array.delete(train)
