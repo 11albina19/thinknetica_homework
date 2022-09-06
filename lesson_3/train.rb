@@ -60,6 +60,8 @@ class Train
 
     current_st.send_train (self)
     next_st.to_accept_train (self)
+
+    @index_station = @index_station + 1
   end
 
   #переместиться назад
@@ -69,6 +71,8 @@ class Train
 
     current_st.send_train (self)
     previous_st.to_accept_train (self)
+
+    @index_station = @index_station -1
   end
 
 end
