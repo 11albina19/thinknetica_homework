@@ -1,12 +1,16 @@
 class Train
-  attr_reader :passenger, :amount, :route, :room, :speed
+  attr_reader :passenger, :wagons_array, :route, :room, :speed
 
-  def initialize(room, passenger, amount)
+  def initialize(room, passenger)
     @room          = room
     @passenger     = passenger
-    @amount        = amount
+    @wagons_array  = []
     @speed         = 0
     @index_station = 0
+  end
+
+  def show_trains 
+    puts self.wagons_array
   end
 
   def to_brake()
@@ -19,15 +23,15 @@ class Train
     @speed = @speed + increase
   end
 
-  def attach()
-    if self.speed == 0
-      @amount = @amount + 1
+  def attach(wagons)
+    if self.speed == 0 && self.passenger == wagons.passenger
+      @wagons_array << wagons
     end
   end
 
-  def unhook()
+  def unhook(wagons)
     if self.speed == 0
-      @amount = @amount - 1
+      @wagons_array.delete(wagons)
     end
   end
 
