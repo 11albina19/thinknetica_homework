@@ -15,7 +15,7 @@ class Route
     @stations.delete(station)
   end
 
-  def show_all()
+  def show_all
     i = 0;
     for index in self.stations
       puts "Станция #{index.name}, #{index}, ИНДЕКС #{i}" 

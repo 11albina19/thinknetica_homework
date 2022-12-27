@@ -82,14 +82,13 @@ class RailRoad
 else
   if number == 3
     puts "-------------------------------------------------------------------"  
-    puts "Созданные станции:" 
-    show_all_station
-    puts "Созданные маршруты:"
-    show_all_route
-    puts "Созданные поезда:" 
-    show_all_train
-    puts "Созданные вагоны:"
-    show_all_wagons
+    puts "Созданные станции и поезда на каждой из них:" 
+    i = 0
+    for index in self.array_station
+      puts "Станция #{index.name}"
+      index.show_trains 
+      i = i + 1
+    end
   else
    puts "Номер не определен." 
  end
@@ -124,7 +123,6 @@ def greate_train
      puts "Номер не определен." 
    end 
  end
-end
 end
 
 def greate_wagons 
@@ -161,23 +159,92 @@ def greate_route
 end
 
 def add_stations_to_route
-  #добавить станцию в маршрут
+
+  puts "Какое изменение требуется? 1 - добавить станцию, 2 - удалить станцию"
+  number = gets.chomp.to_i
+
+  puts "Перед вами список всех доступных маршрутов:"
+  show_all_route
+  puts "Введите индекс выбранного маршрута:"
+  index_route = gets.chomp.to_i
+
+  puts "Перед вами список всех доступных станций:"
+  show_all_station
+  puts "Введите индекс выбранной станции"
+  index_station = gets.chomp.to_i
+
+  if number == 1 
+    array_route[index_route].add(array_station[index_station])
+  else 
+    if number == 2
+      array_route[index_route].delete(array_station[index_station])
+    end
+  end
+
+  puts "Станции маршрута после изменения:"
+  array_route[index_route].show_all
 end
 
 def assign_route
-  #назначить маршрут поезду
+  puts "Перед вами список всех доступных поездов:"
+  show_all_train
+  puts "Введите индекс выбранного поезда:"
+  index_train = gets.chomp.to_i
+
+  puts "Перед вами список всех доступных маршрутов:"
+  show_all_route
+  puts "Введите индекс выбранного маршрута:"
+  index_route = gets.chomp.to_i
+
+  array_train[index_train].attach_route(array_route[index_route])
+
+  puts "Поезду #{array_train[index_train].room}, пассажирский: #{array_train[index_train].to_s},"
+  puts "назначен маршрут #{array_route[index_route]}"
 end
 
 def change_wagons
-  #изменить состав вагонов у поезда
+  puts "Какое изменение требуется? 1 - добавить вагон, 2 - удалить вагон"
+  number = gets.chomp.to_i
+
+  puts "Перед вами список всех доступных поездов:"
+  show_all_train
+  puts "Введите индекс выбранного поезда:"
+  index_train = gets.chomp.to_i
+
+  puts "Перед вами список всех доступных вагонов:"
+  show_all_wagons
+  puts "Введите индекс выбранного вагона"
+  index_wagons = gets.chomp.to_i
+
+  if number == 1
+    array_train[index_train].attach_wagons(array_wagons[index_wagons])
+  else
+   if number == 2
+    array_train[index_train].unhook_wagons(array_wagons[index_wagons])  
+  end
+end
 end
 
 def move_train
-  #переместить поезд по маршруту
+  puts "Какое перемещение поезда требуется? 1 - вперед, 2 - назад"
+  number = gets.chomp.to_i
+
+  puts "Перед вами список всех доступных поездов:"
+  show_all_train
+  puts "Введите индекс выбранного поезда:"
+  index_train = gets.chomp.to_i
+
+  if number == 1
+    array_train[index_train].forward
+  else
+   if number == 2
+    array_train[index_train].back  
+  end
 end 
+end
 
 def show_all_station
-  i = 0;
+  i = 0
   for index in self.array_station
     puts "Станция #{index.name}, #{index}, ИНДЕКС #{i}" 
     i = i + 1
@@ -185,25 +252,27 @@ def show_all_station
 end
 
 def show_all_train
-  i = 0;
+  i = 0
   for index in self.array_train
     puts "Поезд #{index.room}, пассажирский: #{index.passenger.to_s}, #{index}, ИНДЕКС #{i}"
-    i = i + 1; 
+    i = i + 1 
   end
 end
 
 def show_all_wagons
-  i = 0;
+  i = 0
   for index in self.array_wagons
     puts "Вагон #{index.room}, пассажирский: #{index.passenger.to_s}, #{index}, ИНДЕКС #{i}"
-    i = i + 1; 
+    i = i + 1 
   end
 end
 
 def show_all_route
-  i = 0;
+  i = 0
   for index in self.array_route
     puts "Маршрут #{index}, ИНДЕКС #{i}"
-    i = i + 1; 
+    i = i + 1 
   end
+end
+
 end
