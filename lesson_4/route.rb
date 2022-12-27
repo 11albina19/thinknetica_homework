@@ -16,7 +16,11 @@ class Route
   end
 
   def show_all()
-    puts self.stations
+    i = 0;
+    for index in self.stations
+      puts "Станция #{index.name}, #{index}, ИНДЕКС #{i}" 
+      i = i + 1
+    end
   end
 
 end

@@ -6,50 +6,204 @@ require_relative 'route'
 require_relative 'passenger_wagons'
 require_relative 'cargo_wagons'
 
-#st1 = Station.new("Центральная")
-#puts "Создана станция: #{st1.name}, #{st1}"
+class RailRoad
+  attr_accessor :array_station, :array_train, :array_wagons, :array_route
 
-#st2 = Station.new("Покровская")
-#puts "Создана станция: #{st2.name}, #{st2}"
+  def initialize()
+    @array_station = []
+    @array_train   = []
+    @array_wagons  = []
+    @array_route   = []
+  end
 
-#st3 = Station.new("Восстания")
-#puts "Создана станция: #{st3.name}, #{st3}"
+  def menu
+    number = 0
+    while number != 4 do 
+      puts "-------------------------------------------------------------------"
+      puts "Введите 1, если вы хотите создать станцию, поезд, вагон или маршрут"
+      puts "Введите 2, если вы хотите произвести операции с созданными объектами"
+      puts "Введите 3, если вы хотите вывести текущие данные о объектах"
+      puts "Введите 4, если хотите закончить программу"
+      number = gets.chomp.to_i
+      if number == 4 
+        puts "Выполнение программы завершено."
+        break  
+      end
+      if number == 1
+        puts "-------------------------------------------------------------------"
+        puts "Введите 0, если вы хотите создать станцию"
+        puts "Введите 1, если вы хотите создать поезд"
+        puts "Введите 2, если вы хотите создать вагон"
+        puts "Введите 3, если вы хотите создать маршрут"
+        number_greate = gets.chomp.to_i
+        if number_greate == 0
+          greate_station
+        else
+          if number_greate == 1 
+            greate_train
+          else
+            if number_greate == 2 
+              greate_wagons
+            else
+              if number_greate == 3
+                greate_route
+              else
+                puts "Номер не определен. Выполнение программы завершено."
+                break 
+              end
+            end
+          end
+        end
+      else
+        if number == 2
+          puts "-------------------------------------------------------------------" 
+          puts "Введите 0, если вы хотите добавить/удалить станции в существующий маршрут"
+          puts "Введите 1, если вы хотите назначить маршрут поезду"
+          puts "Введите 2, если вы хотите изменить состав вагонов у поезда"
+          puts "Введите 3, если вы хотите переместить поезд по маршруту"
+          number_change = gets.chomp.to_i
+          if number_change == 0
+          add_stations_to_route
+        else
+          if number_change == 1
+          assign_route
+        else
+          if number_change == 2
+          change_wagons
+        else
+          if number_change == 3
+          move_train
+        else
+          puts "Номер не определен."
+        end
+      end
+    end
+  end
+else
+  if number == 3
+    puts "-------------------------------------------------------------------"  
+    puts "Созданные станции:" 
+    show_all_station
+    puts "Созданные маршруты:"
+    show_all_route
+    puts "Созданные поезда:" 
+    show_all_train
+    puts "Созданные вагоны:"
+    show_all_wagons
+  else
+   puts "Номер не определен." 
+ end
+end
+end
+end
+end
 
-#st4 = Station.new("Северная")
-#puts "Создана станция: #{st4.name}, #{st4}"
+def greate_station
+  puts "Как назвать станцию?"
+  name = gets.chomp
+  st = Station.new(name)
+  self.array_station << st
+  puts "Создана станция " + st.name + " !"
+end
 
-#st5 = Station.new("Восточная")
-#puts "Создана станция: #{st5.name}, #{st5}"
+def greate_train
+  puts "Это пассажирский поезд? 1 - пассажирский, 2 - грузовой"
+  number_passenger = gets.chomp.to_i
+  puts "Введите номер поезда"
+  train_room = gets.chomp.to_i
+  if number_passenger == 1
+    t = PassengerTrain.new(train_room)
+    self.array_train << t
+    puts "Создан поезд " + t.room.to_s 
+  else
+    if number_passenger == 2
+      t = CargoTrain.new(train_room)
+      self.array_train << t
+      puts "Создан поезд " + t.room.to_s  
+    else
+     puts "Номер не определен." 
+   end 
+ end
+end
+end
 
-#st6 = Station.new("Северо-восток")
-#puts "Создана станция: #{st6.name}, #{st6}"
+def greate_wagons 
+  puts "Это пассажирский вагон? 1 - пассажирский, 2 - грузовой"
+  number_passenger = gets.chomp.to_i
+  puts "Введите номер вагона"
+  wagons_room = gets.chomp.to_i
+  if number_passenger == 1
+    w = PassengerWagons.new(wagons_room)
+    self.array_wagons << w
+    puts "Создан вагон " + w.room.to_s 
+  else
+    if number_passenger == 2
+      w = CargoWagons.new(wagons_room)
+      self.array_wagons << w
+      puts "Создан вагон " + w.room.to_s  
+    else
+     puts "Номер не определен." 
+   end 
+ end
+end
 
-#pa1 = PassengerWagons.new(1)
-#pa2 = PassengerWagons.new(2)
-#t1  = PassengerTrain.new(1)
-#puts "Создан поезд: #{t1.room}"
-#puts "Все вагоны: #{t1.show_trains()}"
-#t1.attach(pa1)
-#t1.attach(pa2)
-#puts "Все вагоны после добавления: #{t1.show_trains()}"
+def greate_route
+  puts "Перед вами список всех доступных станций:"
+  show_all_station
+  puts "Введите индекс начальной станции маршрута"
+  index_begin = gets.chomp.to_i
+  puts "Введите индекс конечной станции маршрута"
+  index_end = gets.chomp.to_i
+  r = Route.new(array_station[index_begin], array_station[index_end])
+  self.array_route << r 
+  puts "Создан маршрут! Его станции: "
+  r.show_all 
+end
 
-#t2 = Train.new(2, true, 6)
-#puts "Создан поезд: #{t2.room}"
+def add_stations_to_route
+  #добавить станцию в маршрут
+end
 
-#t3 = Train.new(3, false, 15)
-#puts "Создан поезд: #{t3.room}"
+def assign_route
+  #назначить маршрут поезду
+end
 
-#r1 = Route.new(st1, st4)
-#puts "Создан маршрут: #{r1}"
-#r1.add(st2)
-#r1.add(st3)
-#r1.add(st3)
-#r1.add(st5)
-#r1.delete(st5)
-#r1.show_all
+def change_wagons
+  #изменить состав вагонов у поезда
+end
 
-#r2 = Route.new(st5, st1)
-#puts "Создан маршрут: #{r2}"
+def move_train
+  #переместить поезд по маршруту
+end 
 
-#r3 = Route.new(st4, st5)
-#puts "Создан маршрут: #{r3}"
+def show_all_station
+  i = 0;
+  for index in self.array_station
+    puts "Станция #{index.name}, #{index}, ИНДЕКС #{i}" 
+    i = i + 1
+  end
+end
+
+def show_all_train
+  i = 0;
+  for index in self.array_train
+    puts "Поезд #{index.room}, пассажирский: #{index.passenger.to_s}, #{index}, ИНДЕКС #{i}"
+    i = i + 1; 
+  end
+end
+
+def show_all_wagons
+  i = 0;
+  for index in self.array_wagons
+    puts "Вагон #{index.room}, пассажирский: #{index.passenger.to_s}, #{index}, ИНДЕКС #{i}"
+    i = i + 1; 
+  end
+end
+
+def show_all_route
+  i = 0;
+  for index in self.array_route
+    puts "Маршрут #{index}, ИНДЕКС #{i}"
+    i = i + 1; 
+  end
+end
