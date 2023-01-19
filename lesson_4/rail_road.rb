@@ -35,6 +35,7 @@ class RailRoad
         puts "Введите 1, если вы хотите создать поезд"
         puts "Введите 2, если вы хотите создать вагон"
         puts "Введите 3, если вы хотите создать маршрут"
+        puts "Введите 4 для возврата в предыдущее меню"
         number_greate = gets.chomp.to_i
         if number_greate == 0
           greate_station
@@ -48,8 +49,12 @@ class RailRoad
               if number_greate == 3
                 greate_route
               else
-                puts "Номер не определен. Выполнение программы завершено."
-                break
+                if number_greate == 4
+                  next
+                else
+                  puts "Номер не определен. Выполнение программы завершено."
+                  break
+                end
               end
             end
           end
@@ -61,6 +66,7 @@ class RailRoad
           puts "Введите 1, если вы хотите назначить маршрут поезду"
           puts "Введите 2, если вы хотите изменить состав вагонов у поезда"
           puts "Введите 3, если вы хотите переместить поезд по маршруту"
+          puts "Введите 4 для возврата в предыдущее меню"
           number_change = gets.chomp.to_i
           if number_change == 0
             add_stations_to_route
@@ -74,7 +80,11 @@ class RailRoad
                 if number_change == 3
                   move_train
                 else
-                  puts "Номер не определен."
+                  if number_greate == 4
+                    next
+                  else
+                    puts "Номер не определен."
+                  end
                 end
               end
             end
