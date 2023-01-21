@@ -75,11 +75,9 @@ class RailRoad
       when 3
         puts "-------------------------------------------------------------------"
         puts "Созданные станции и поезда на каждой из них:"
-        i = 0
         for index in self.array_station
           puts "Станция #{index.name}"
           index.show_trains
-          i = i + 1
         end
       when 4
         puts "Выполнение программы завершено."
