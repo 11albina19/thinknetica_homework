@@ -2,9 +2,16 @@ class Station
   attr_accessor :train_array
   attr_reader   :name
 
+  @@stations = []
+
+  def self.all ()
+    puts @@stations
+  end
+
   def initialize(name)
     @name        = name
     @train_array = []
+    @@stations << self
   end
 
   def show_trains 

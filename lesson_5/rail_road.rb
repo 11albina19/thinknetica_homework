@@ -5,15 +5,16 @@ require_relative 'station'
 require_relative 'route'
 require_relative 'passenger_wagons'
 require_relative 'cargo_wagons'
+require_relative 'information'
 
 class RailRoad
-  attr_accessor :array_station, :array_train, :array_wagons, :array_route
+  attr_reader :stations, :trains, :wagons, :routes
 
   def initialize
-    @array_station = []
-    @array_train = []
-    @array_wagons = []
-    @array_route = []
+    @stations = []
+    @trains = []
+    @wagons = []
+    @routes = []
   end
 
   def menu
@@ -75,7 +76,7 @@ class RailRoad
       when 3
         puts "-------------------------------------------------------------------"
         puts "Созданные станции и поезда на каждой из них:"
-        for index in self.array_station
+        for index in @stations
           puts "Станция #{index.name}"
           index.show_trains
         end
@@ -93,7 +94,7 @@ class RailRoad
     puts "Как назвать станцию?"
     name = gets.chomp
     station = Station.new(name)
-    self.array_station << station
+    @stations << station
     puts "Создана станция " + station.name + " !"
   end
 
@@ -104,11 +105,11 @@ class RailRoad
     train_room = gets.chomp.to_i
     if number_passenger == 1
       train = PassengerTrain.new(train_room)
-      self.array_train << train
+      @trains << train
       puts "Создан поезд " + train.room.to_s
     elsif number_passenger == 2
       train = CargoTrain.new(train_room)
-      self.array_train << train
+      @trains << train
       puts "Создан поезд " + train.room.to_s
     else
       puts "Номер не определен"
@@ -119,15 +120,15 @@ class RailRoad
     puts "Это пассажирский вагон? 1 - пассажирский, 2 - грузовой"
     number_passenger = gets.chomp.to_i
     puts "Введите номер вагона"
-    wagons_room = gets.chomp.to_i
+    wagon_room = gets.chomp.to_i
     if number_passenger == 1
-      wagons = PassengerWagons.new(wagons_room)
-      self.array_wagons << wagons
-      puts "Создан вагон " + wagons.room.to_s
+      wagon = PassengerWagons.new(wagon_room)
+      @wagons << wagon
+      puts "Создан вагон " + wagon.room.to_s
     elsif number_passenger == 2
-      wagons = CargoWagons.new(wagons_room)
-      self.array_wagons << wagons
-      puts "Создан вагон " + wagons.room.to_s
+      wagon = CargoWagons.new(wagon_room)
+      @wagons << wagon
+      puts "Создан вагон " + wagon.room.to_s
     else
       puts "Номер не определен"
     end
@@ -139,18 +140,18 @@ def create_route
   show_all_station
   puts "Введите индекс начальной станции маршрута"
   index_begin = gets.chomp.to_i
-  begin_selection_error = type_check(array_station, index_begin)
+  begin_selection_error = type_check(stations, index_begin)
   if begin_selection_error
     return
   end
   puts "Введите индекс конечной станции маршрута"
   index_end = gets.chomp.to_i
-  end_selection_error = type_check(array_station, index_end)
+  end_selection_error = type_check(stations, index_end)
   if end_selection_error
     return
   end
-  route = Route.new(array_station[index_begin], array_station[index_end])
-  self.array_route << route
+  route = Route.new(stations[index_begin], stations[index_end])
+  @routes << route
   puts "Создан маршрут! Его станции: "
   route.show_all
 end
@@ -162,7 +163,7 @@ def add_stations_to_route
   show_all_route
   puts "Введите индекс выбранного маршрута:"
   index_route = gets.chomp.to_i
-  route_selection_error = type_check(array_route, index_route)
+  route_selection_error = type_check(routes, index_route)
   if route_selection_error
     return
   end
@@ -170,17 +171,17 @@ def add_stations_to_route
   show_all_station
   puts "Введите индекс выбранной станции"
   index_station = gets.chomp.to_i
-  station_selection_error = type_check(array_station, index_station)
+  station_selection_error = type_check(stations, index_station)
   if station_selection_error
     return
   end
   if number == 1
-    array_route[index_route].add(array_station[index_station])
+    routes[index_route].add(stations[index_station])
   elsif number == 2
-    array_route[index_route].delete(array_station[index_station])
+    routes[index_route].delete(stations[index_station])
   end
   puts "Станции маршрута после изменения:"
-  array_route[index_route].show_all
+  routes[index_route].show_all
 end
 
 def assign_route
@@ -188,7 +189,7 @@ def assign_route
   show_all_train
   puts "Введите индекс выбранного поезда:"
   index_train = gets.chomp.to_i
-  train_selection_error = type_check(array_train, index_train)
+  train_selection_error = type_check(trains, index_train)
   if train_selection_error
     return
   end
@@ -196,13 +197,13 @@ def assign_route
   show_all_route
   puts "Введите индекс выбранного маршрута:"
   index_route = gets.chomp.to_i
-  route_selection_error = type_check(array_route, index_route)
+  route_selection_error = type_check(routes, index_route)
   if route_selection_error
     return
   end
-  array_train[index_train].attach_route(array_route[index_route])
-  puts "Поезду #{array_train[index_train].room}, пассажирский: #{array_train[index_train].to_s},"
-  puts "назначен маршрут #{array_route[index_route]}"
+  trains[index_train].attach_route(routes[index_route])
+  puts "Поезду #{trains[index_train].room}, пассажирский: #{trains[index_train].to_s},"
+  puts "назначен маршрут #{routes[index_route]}"
 end
 
 def change_wagons
@@ -212,7 +213,7 @@ def change_wagons
   show_all_train
   puts "Введите индекс выбранного поезда:"
   index_train = gets.chomp.to_i
-  train_selection_error = type_check(array_train, index_train)
+  train_selection_error = type_check(trains, index_train)
   if train_selection_error
     return
   end
@@ -220,14 +221,14 @@ def change_wagons
   show_all_wagons
   puts "Введите индекс выбранного вагона"
   index_wagons = gets.chomp.to_i
-  wagons_selection_error = type_check(array_wagons, index_wagons)
+  wagons_selection_error = type_check(wagons, index_wagons)
   if wagons_selection_error
     return
   end
   if number == 1
-    array_train[index_train].attach_wagons(array_wagons[index_wagons])
+    trains[index_train].attach_wagons(wagons[index_wagons])
   elsif number == 2
-    array_train[index_train].unhook_wagons(array_wagons[index_wagons])
+    trains[index_train].unhook_wagons(wagons[index_wagons])
   end
 end
 
@@ -238,37 +239,37 @@ def move_train
   show_all_train
   puts "Введите индекс выбранного поезда:"
   index_train = gets.chomp.to_i
-  train_selection_error = type_check(array_train, index_train)
+  train_selection_error = type_check(trains, index_train)
   if train_selection_error
     return
   end
   if number == 1
-    array_train[index_train].forward
+    trains[index_train].forward
   elsif number == 2
-    array_train[index_train].back
+    trains[index_train].back
   end
 end
 
 def show_all_station
-  array_station.each_with_index do |station, index|
+  stations.each_with_index do |station, index|
     puts "Станция #{station.name}, ИНДЕКС #{index}"
   end
 end
 
 def show_all_train
-  array_train.each_with_index do |train, index|
+  trains.each_with_index do |train, index|
     puts "Поезд #{train.room}, пассажирский: #{train.passenger.to_s}, ИНДЕКС #{index}"
   end
 end
 
 def show_all_wagons
-  array_wagons.each_with_index do |wagons, index|
-    puts "Вагон #{wagons.room}, пассажирский: #{wagons.passenger.to_s}, ИНДЕКС #{index}"
+  wagons.each_with_index do |wagon, index|
+    puts "Вагон #{wagon.room}, пассажирский: #{wagon.passenger.to_s}, ИНДЕКС #{index}"
   end
 end
 
 def show_all_route
-  array_route.each_with_index do |route, index|
+  routes.each_with_index do |route, index|
     puts "Маршрут, ИНДЕКС #{index}"
   end
 end

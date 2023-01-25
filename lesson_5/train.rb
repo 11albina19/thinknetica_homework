@@ -1,6 +1,10 @@
 class Train
+  include Information::InstanceMethods
+
   attr_accessor :wagons_array, :route, :speed
   attr_reader   :passenger, :room
+
+  @@trains = []
 
   def initialize(room, passenger)
     @room          = room
@@ -8,6 +12,7 @@ class Train
     @wagons_array  = []
     @speed         = 0
     @index_station = 0
+    self.class.trains[room] = self
   end
 
   def show_trains
