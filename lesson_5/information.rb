@@ -1,4 +1,8 @@
 module Information
+  def self.included(base)
+    base.include(InstanceMethods)
+  end
+
   module InstanceMethods
     def get_name_manufacturer
       name

@@ -1,5 +1,7 @@
+require_relative 'information'
+
 class PassengerWagons
-  include Information::InstanceMethods
+  include Information
   attr_reader :room, :passenger
 
   def initialize(room)

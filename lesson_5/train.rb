@@ -1,10 +1,22 @@
+require_relative 'information'
+require_relative 'instance_counter'
+
 class Train
-  include Information::InstanceMethods
+  include Information
+  include InstanceCounter
 
   attr_accessor :wagons_array, :route, :speed
   attr_reader   :passenger, :room
 
-  @@trains = []
+  @@trains = {}
+
+  def self.find (room)
+    @@trains[room]
+  end
+
+  def self.train (room, object)
+    @@trains[room] = object
+  end
 
   def initialize(room, passenger)
     @room          = room
@@ -12,7 +24,7 @@ class Train
     @wagons_array  = []
     @speed         = 0
     @index_station = 0
-    self.class.trains[room] = self
+    self.class.train(room, self)
   end
 
   def show_trains
