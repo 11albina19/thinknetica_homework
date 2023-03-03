@@ -14,7 +14,6 @@ module InstanceCounter
     def increment_instances
       self.instances += 1
     end
-
   end
 
   module InstanceMethods

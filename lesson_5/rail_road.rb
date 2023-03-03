@@ -5,8 +5,6 @@ require_relative 'station'
 require_relative 'route'
 require_relative 'passenger_wagons'
 require_relative 'cargo_wagons'
-#require_relative 'information'
-#require_relative 'instance_counter'
 
 class RailRoad
   attr_reader :stations, :trains, :wagons, :routes

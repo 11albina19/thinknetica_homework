@@ -25,5 +25,4 @@ class Route
       i = i + 1
     end
   end
-
 end

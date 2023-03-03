@@ -44,5 +44,4 @@ class Station
     puts('Со станции ' + self.name + ' отправляется поезд: ' + train.room.to_s)
     self.train_array.delete(train)
   end
-
 end
