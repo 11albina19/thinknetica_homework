@@ -8,6 +8,8 @@ class Train
   attr_accessor :wagons_array, :route, :speed
   attr_reader   :passenger, :room
 
+  NUMBER_FORMAT = /[а-я0-9]{3}[-]{0,1}[а-я0-9]{2}$/i
+
   @@trains = {}
 
   def self.find (room)
@@ -25,6 +27,7 @@ class Train
     @speed         = 0
     @index_station = 0
     self.class.train(room, self)
+    validate!
   end
 
   def show_trains
@@ -99,5 +102,23 @@ class Train
   #следующая станция
   def station_next
     self.route.stations[@index_station+1]
+  end
+
+  def validate!
+    value = valid?
+    raise "Value is not correct" if value == false
+  end
+
+  def valid?
+    if (passenger.is_a? TrueClass) || (passenger.is_a? FalseClass)
+      true
+    else
+      return false
+    end
+    if room !~ NUMBER_FORMAT
+      return false
+    else
+      true
+    end
   end
 end

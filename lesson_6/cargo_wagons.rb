@@ -5,28 +5,27 @@ class CargoWagons
   attr_reader :room, :passenger
 
   def initialize(room)
-    #valid?
-    @room      = room
+    @room = room
     @passenger = false
-    valid?
-    #raise "Stop, stop, stop!"
-  end
-
-  def valid?
-    #validate!
-    Math.sqrt(-1)
-    true
-  rescue
-    false
+    validate!
   end
 
   def validate!
-    #value = room
-    #raise "Room can't be nil" if value.nil?
-    #if value.is_a? Integer
-    #  value.to_s
-    #end
-    #raise "Room should be at least 3 symbols" if value.length < 3
-    raise "Stop, stop, stop!"
+    value = valid?
+    raise "Value is not correct" if value == false
+  end
+
+  def valid?
+    if room.is_a? Integer
+      return false
+    else
+      true
+    end
+    if room.nil? || room.length < 3
+      return false
+    else
+      true
+    end
   end
 end
+

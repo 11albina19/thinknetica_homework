@@ -8,18 +8,19 @@ class Station
 
   @@stations = []
 
-  def self.all ()
-    puts @@stations
+  def self.all
+    @@stations
   end
 
   def initialize(name)
     @name        = name
     @train_array = []
     @@stations << self
+    validate!
   end
 
   def show_trains 
-    puts self.train_array
+    self.train_array
   end
 
   def show_trains_type 
@@ -43,5 +44,23 @@ class Station
   def send_train(train)
     puts('Со станции ' + self.name + ' отправляется поезд: ' + train.room.to_s)
     self.train_array.delete(train)
+  end
+
+  def validate!
+    value = valid?
+    raise "Value is not correct" if value == false
+  end
+
+  def valid?
+    if name.is_a? String
+      true
+    else
+      return false
+    end
+    if room.length < 2
+      return false
+    else
+      true
+    end
   end
 end

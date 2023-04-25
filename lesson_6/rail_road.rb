@@ -100,6 +100,8 @@ class RailRoad
   def create_train
     puts "Это пассажирский поезд? 1 - пассажирский, 2 - грузовой"
     number_passenger = gets.chomp.to_i
+    affempf = 0
+    begin
     puts "Введите номер поезда"
     train_room = gets.chomp.to_i
     if number_passenger == 1
@@ -112,6 +114,11 @@ class RailRoad
       puts "Создан поезд " + train.room.to_s
     else
       puts "Номер не определен"
+    end
+    rescue StandardError => e
+      affempf = affempf + 1
+      puts "Возникло исключение: #{e.message}. Попробуйте еще раз!"
+      retry if affempf < 2
     end
   end
 
