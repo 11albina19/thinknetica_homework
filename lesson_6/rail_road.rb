@@ -90,11 +90,11 @@ class RailRoad
   end
 
   def create_station
-    puts "Как назвать станцию?"
-    name = gets.chomp
-    station = Station.new(name)
-    @stations << station
-    puts "Создана станция " + station.name + " !"
+      puts "Как назвать станцию?"
+      name = gets.chomp
+      station = Station.new(name)
+      @stations << station
+      puts "Создана станция " + station.name + " !"
   end
 
   def create_train
@@ -102,19 +102,19 @@ class RailRoad
     number_passenger = gets.chomp.to_i
     affempf = 0
     begin
-    puts "Введите номер поезда"
-    train_room = gets.chomp.to_i
-    if number_passenger == 1
-      train = PassengerTrain.new(train_room)
-      @trains << train
-      puts "Создан поезд " + train.room.to_s
-    elsif number_passenger == 2
-      train = CargoTrain.new(train_room)
-      @trains << train
-      puts "Создан поезд " + train.room.to_s
-    else
-      puts "Номер не определен"
-    end
+      puts "Введите номер поезда"
+      train_room = gets.chomp.to_i
+      if number_passenger == 1
+        train = PassengerTrain.new(train_room)
+        @trains << train
+        puts "Создан поезд " + train.room.to_s
+      elsif number_passenger == 2
+        train = CargoTrain.new(train_room)
+        @trains << train
+        puts "Создан поезд " + train.room.to_s
+      else
+        puts "Номер не определен"
+      end
     rescue StandardError => e
       affempf = affempf + 1
       puts "Возникло исключение: #{e.message}. Попробуйте еще раз!"

@@ -16,12 +16,16 @@ class CargoWagons
   end
 
   def valid?
-    if room.is_a? Integer
-      return false
-    else
-      true
-    end
-    if room.nil? || room.length < 3
+    # if room.is_a? Integer
+    #  return false
+    # else
+    #  true
+    # end
+
+    value = room.to_s
+
+    # if value.nil? || value.length <
+    if value.length < 3
       return false
     else
       true

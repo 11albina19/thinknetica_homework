@@ -4,7 +4,7 @@ class Station
   include InstanceCounter
 
   attr_accessor :train_array
-  attr_reader   :name
+  attr_reader :name
 
   @@stations = []
 
@@ -13,26 +13,26 @@ class Station
   end
 
   def initialize(name)
-    @name        = name
+    @name = name
     @train_array = []
     @@stations << self
     validate!
   end
 
-  def show_trains 
+  def show_trains
     self.train_array
   end
 
-  def show_trains_type 
+  def show_trains_type
     quantity_p = 0
     quantity_c = 0
     for index in self.train_array
-      if index.passenger 
+      if index.passenger
         quantity_p += 1
       else
         quantity_c += 1
       end
-    end 
+    end
     puts('Количество пассажирских: ' + quantity_p.to_s + " , количество грузовых: " + quantity_c.to_s)
   end
 
@@ -57,7 +57,7 @@ class Station
     else
       return false
     end
-    if room.length < 2
+    if name.length < 2
       return false
     else
       true
