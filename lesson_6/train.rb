@@ -8,7 +8,9 @@ class Train
   attr_accessor :wagons_array, :route, :speed
   attr_reader   :passenger, :room
 
-  NUMBER_FORMAT = /[а-я0-9]{3}[-]{0,1}[а-я0-9]{2}$/i
+  #NUMBER_FORMAT = /[а-я0-9]{3}[-]{0,1}[а-я0-9]{2}$/i
+  #NUMBER_FORMAT = /^[а-яa-z\d]{3}-?[а-яa-z\d]{2}$/i
+  NAME_FORMAT = /^[a-zа-я\d\s]{1,20}$/i
 
   @@trains = {}
 
@@ -22,12 +24,12 @@ class Train
 
   def initialize(room, passenger)
     @room          = room
+    validate!
     @passenger     = passenger
     @wagons_array  = []
     @speed         = 0
     @index_station = 0
     self.class.train(room, self)
-    validate!
   end
 
   def show_trains
@@ -104,21 +106,10 @@ class Train
     self.route.stations[@index_station+1]
   end
 
+  #def validate!
+  #  raise "Input error. Use letters and numbers in the format: XXX-XX/XXXXX" if @room !~ NAME_FORMAT
+  #end
   def validate!
-    value = valid?
-    raise "Value is not correct" if value == false
-  end
-
-  def valid?
-    if (passenger.is_a? TrueClass) || (passenger.is_a? FalseClass)
-      true
-    else
-      return false
-    end
-    if room !~ NUMBER_FORMAT
-      return false
-    else
-      true
-    end
+    raise "Input error. To create a title, use only letters, numbers and spaces; the length of the title should not exceed 20 characters" if @room !~ NAME_FORMAT
   end
 end

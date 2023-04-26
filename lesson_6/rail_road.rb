@@ -90,18 +90,23 @@ class RailRoad
   end
 
   def create_station
+    begin
       puts "Как назвать станцию?"
       name = gets.chomp
       station = Station.new(name)
       @stations << station
       puts "Создана станция " + station.name + " !"
+    rescue => e
+      puts e.message
+      retry
+    end
   end
 
   def create_train
-    puts "Это пассажирский поезд? 1 - пассажирский, 2 - грузовой"
-    number_passenger = gets.chomp.to_i
     affempf = 0
     begin
+      puts "Это пассажирский поезд? 1 - пассажирский, 2 - грузовой"
+      number_passenger = gets.chomp.to_i
       puts "Введите номер поезда"
       train_room = gets.chomp.to_i
       if number_passenger == 1
@@ -115,28 +120,35 @@ class RailRoad
       else
         puts "Номер не определен"
       end
-    rescue StandardError => e
+    rescue => e
       affempf = affempf + 1
-      puts "Возникло исключение: #{e.message}. Попробуйте еще раз!"
-      retry if affempf < 2
+      puts e.message
+      retry if affempf < 3
     end
   end
 
   def create_wagons
-    puts "Это пассажирский вагон? 1 - пассажирский, 2 - грузовой"
-    number_passenger = gets.chomp.to_i
-    puts "Введите номер вагона"
-    wagon_room = gets.chomp.to_i
-    if number_passenger == 1
-      wagon = PassengerWagons.new(wagon_room)
-      @wagons << wagon
-      puts "Создан вагон " + wagon.room.to_s
-    elsif number_passenger == 2
-      wagon = CargoWagons.new(wagon_room)
-      @wagons << wagon
-      puts "Создан вагон " + wagon.room.to_s
-    else
-      puts "Номер не определен"
+    affempf = 0
+    begin
+      puts "Это пассажирский вагон? 1 - пассажирский, 2 - грузовой"
+      number_passenger = gets.chomp.to_i
+      puts "Введите номер вагона"
+      wagon_room = gets.chomp.to_i
+      if number_passenger == 1
+        wagon = PassengerWagons.new(wagon_room)
+        @wagons << wagon
+        puts "Создан вагон " + wagon.room.to_s
+      elsif number_passenger == 2
+        wagon = CargoWagons.new(wagon_room)
+        @wagons << wagon
+        puts "Создан вагон " + wagon.room.to_s
+      else
+        puts "Номер не определен"
+      end
+    rescue => e
+      affempf = affempf + 1
+      puts e.message
+      retry if affempf < 3
     end
   end
 end
@@ -144,22 +156,29 @@ end
 def create_route
   puts "Перед вами список всех доступных станций:"
   show_all_station
-  puts "Введите индекс начальной станции маршрута"
-  index_begin = gets.chomp.to_i
-  begin_selection_error = type_check(stations, index_begin)
-  if begin_selection_error
-    return
+  attempf = 0
+  begin
+    puts "Введите индекс начальной станции маршрута"
+    index_begin = gets.chomp.to_i
+    begin_selection_error = type_check(stations, index_begin)
+    if begin_selection_error
+      return
+    end
+    puts "Введите индекс конечной станции маршрута"
+    index_end = gets.chomp.to_i
+    end_selection_error = type_check(stations, index_end)
+    if end_selection_error
+      return
+    end
+    route = Route.new(stations[index_begin], stations[index_end])
+    @routes << route
+    puts "Создан маршрут! Его станции: "
+    route.show_all
+  rescue => e
+    attempf = attempf + 1
+    puts e.message
+    retry if attempf < 3
   end
-  puts "Введите индекс конечной станции маршрута"
-  index_end = gets.chomp.to_i
-  end_selection_error = type_check(stations, index_end)
-  if end_selection_error
-    return
-  end
-  route = Route.new(stations[index_begin], stations[index_end])
-  @routes << route
-  puts "Создан маршрут! Его станции: "
-  route.show_all
 end
 
 def add_stations_to_route

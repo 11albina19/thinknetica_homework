@@ -6,6 +6,8 @@ class Station
   attr_accessor :train_array
   attr_reader :name
 
+  NAME_FORMAT = /^[a-zа-я\d\s]{1,20}$/i
+
   @@stations = []
 
   def self.all
@@ -47,20 +49,6 @@ class Station
   end
 
   def validate!
-    value = valid?
-    raise "Value is not correct" if value == false
-  end
-
-  def valid?
-    if name.is_a? String
-      true
-    else
-      return false
-    end
-    if name.length < 2
-      return false
-    else
-      true
-    end
+    raise "Input error. To create a title, use only letters, numbers and spaces; the length of the title should not exceed 20 characters" if @name !~ NAME_FORMAT
   end
 end
