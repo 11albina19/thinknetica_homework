@@ -103,10 +103,7 @@ class Train
   def station_next
     self.route.stations[@index_station+1]
   end
-
-  #def validate!
-  #  raise "Input error. Use letters and numbers in the format: XXX-XX/XXXXX" if @room !~ ROOM_FORMAT
-  #end
+  
   def validate!
     raise "Input Error. Use letters and numbers in the format: XXX-XX/XXXXX" if @name !~ NAME_FORMAT
   end
