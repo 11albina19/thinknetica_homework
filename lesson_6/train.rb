@@ -6,30 +6,28 @@ class Train
   include InstanceCounter
 
   attr_accessor :wagons_array, :route, :speed
-  attr_reader   :passenger, :room
+  attr_reader   :passenger, :name
 
-  #NUMBER_FORMAT = /[а-я0-9]{3}[-]{0,1}[а-я0-9]{2}$/i
-  #NUMBER_FORMAT = /^[а-яa-z\d]{3}-?[а-яa-z\d]{2}$/i
-  NAME_FORMAT = /^[a-zа-я\d\s]{1,20}$/i
+  NAME_FORMAT = /^[а-яa-z0-9\d]{3}-?[а-яa-z0-9\d]{2}$/i
 
   @@trains = {}
 
-  def self.find (room)
-    @@trains[room]
+  def self.find (name)
+    @@trains[name]
   end
 
-  def self.train (room, object)
-    @@trains[room] = object
+  def self.train (name, object)
+    @@trains[name] = object
   end
 
-  def initialize(room, passenger)
-    @room          = room
+  def initialize(name, passenger)
+    @room          = name
     validate!
     @passenger     = passenger
     @wagons_array  = []
     @speed         = 0
     @index_station = 0
-    self.class.train(room, self)
+    self.class.train(name, self)
   end
 
   def show_trains
@@ -107,9 +105,9 @@ class Train
   end
 
   #def validate!
-  #  raise "Input error. Use letters and numbers in the format: XXX-XX/XXXXX" if @room !~ NAME_FORMAT
+  #  raise "Input error. Use letters and numbers in the format: XXX-XX/XXXXX" if @room !~ ROOM_FORMAT
   #end
   def validate!
-    raise "Input error. To create a title, use only letters, numbers and spaces; the length of the title should not exceed 20 characters" if @room !~ NAME_FORMAT
+    raise "Input Error. Use letters and numbers in the format: XXX-XX/XXXXX" if @name !~ NAME_FORMAT
   end
 end

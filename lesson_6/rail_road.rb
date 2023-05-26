@@ -106,19 +106,19 @@ class RailRoad
     affempf = 0
     begin
       puts "Это пассажирский поезд? 1 - пассажирский, 2 - грузовой"
-      number_passenger = gets.chomp.to_i
-      puts "Введите номер поезда"
-      train_room = gets.chomp.to_i
-      if number_passenger == 1
-        train = PassengerTrain.new(train_room)
+      train_type = gets.chomp.to_i
+      puts "Введите наименование поезда в формате 3 буквы или цифры, необязательный дефис и еще 2 буквы или цифры"
+      train_name = gets.chomp.to_s
+      if train_type == 1
+        train = PassengerTrain.new(train_name)
         @trains << train
-        puts "Создан поезд " + train.room.to_s
-      elsif number_passenger == 2
-        train = CargoTrain.new(train_room)
+        puts "Создан поезд " + train.name.to_s
+      elsif train_type == 2
+        train = CargoTrain.new(train_name)
         @trains << train
-        puts "Создан поезд " + train.room.to_s
+        puts "Создан поезд " + train.name.to_s
       else
-        puts "Номер не определен"
+        puts "Неверный тип поезда"
       end
     rescue => e
       affempf = affempf + 1
@@ -131,19 +131,19 @@ class RailRoad
     affempf = 0
     begin
       puts "Это пассажирский вагон? 1 - пассажирский, 2 - грузовой"
-      number_passenger = gets.chomp.to_i
+      wagon_type = gets.chomp.to_i
       puts "Введите номер вагона"
-      wagon_room = gets.chomp.to_i
-      if number_passenger == 1
-        wagon = PassengerWagons.new(wagon_room)
+      wagon_number = gets.chomp.to_i
+      if wagon_type == 1
+        wagon = PassengerWagons.new(wagon_number)
         @wagons << wagon
-        puts "Создан вагон " + wagon.room.to_s
-      elsif number_passenger == 2
-        wagon = CargoWagons.new(wagon_room)
+        puts "Создан вагон " + wagon.number.to_s
+      elsif wagon_type == 2
+        wagon = CargoWagons.new(wagon_number)
         @wagons << wagon
-        puts "Создан вагон " + wagon.room.to_s
+        puts "Создан вагон " + wagon.number.to_s
       else
-        puts "Номер не определен"
+        puts "Неверный тип вагона"
       end
     rescue => e
       affempf = affempf + 1

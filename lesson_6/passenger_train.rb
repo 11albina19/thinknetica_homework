@@ -1,7 +1,7 @@
 class PassengerTrain < Train
 
-  def initialize(room)
-    @room          = room
+  def initialize(name)
+    @name          = name
     validate!
     @passenger     = true
     @wagons_array  = []
