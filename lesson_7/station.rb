@@ -34,7 +34,7 @@ class Station
   end
 
   def print_trains_list
-    block = lambda { |train| puts "#{train.name}, #{train.passenger}, #{train.show_trains} "}
+    block = lambda { |train| puts "#{train.name}, #{train.type}, #{train.show_trains} "}
     show_list_trains(&block)
   end
 
@@ -62,9 +62,6 @@ class Station
   end
 
   def validate!
-    puts NAME_FORMAT
-    puts @name
-    puts self.name
     raise "Input error. To create a title, use only letters, numbers and spaces; the length of the title should not exceed 20 characters" if @name !~ NAME_FORMAT
   end
 end

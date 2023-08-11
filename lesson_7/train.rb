@@ -5,8 +5,8 @@ class Train
   include Information
   include InstanceCounter
 
-  attr_accessor :wagons_array, :route, :speed
-  attr_reader   :passenger, :name
+  attr_accessor :wagon_array, :route, :speed
+  attr_reader   :type, :name
 
   NAME_FORMAT = /^[а-яa-z0-9\d]{3}-?[а-яa-z0-9\d]{2}$/i
 
@@ -20,21 +20,20 @@ class Train
     @@trains[name] = object
   end
 
-  def initialize(name, passenger)
+  def initialize(name)
     @name          = name
     validate!
-    @passenger     = passenger
-    @wagons_array  = []
+    @wagon_array  = []
     @speed         = 0
     @index_station = 0
     self.class.train(name, self)
   end
 
   def show_trains
-    self.wagons_array
+    self.wagon_array
   end
 
-  def show_list_wagons(&block)
+  def show_list_wagon(&block)
     return until block_given?
     wagons = show_trains
     wagons.each do |wagon|
@@ -42,8 +41,8 @@ class Train
     end
   end
 
-  def print_wagons_list
-    show_list_wagons(&Train.block_wagons)
+  def print_wagon_list
+    show_list_wagon(&Train.block_wagon)
   end
 
   def to_brake
@@ -56,15 +55,15 @@ class Train
     self.speed = self.speed + increase
   end
 
-  def attach_wagons(wagons)
-    if self.speed == 0 && self.passenger == wagons.passenger
-      self.wagons_array << wagons
+  def attach_wagon(wagon)
+    if self.speed == 0 && self.type == wagon.type
+      self.wagon_array << wagon
     end
   end
 
-  def unhook_wagons(wagons)
+  def unhook_wagon(wagon)
     if self.speed == 0
-      self.wagons_array.delete(wagons)
+      self.wagon_array.delete(wagon)
     end
   end
 
@@ -121,17 +120,13 @@ class Train
   end
 
 class << self
-  def block_wagons()
+  def block_wagon()
     ->(wagon) do
-    case wagon.passenger
-    when true
-      all        = wagon.all_seats
-      available  = wagon.show_available
-    when false
-      all        = wagon.all_volume
-      available  = wagon.show_available
+    case wagon.type
+    when :passenger
+    when :cargo
     end
-    puts "#{wagon.number}, #{wagon.passenger}, общее количество мест/объема: #{all}, доступно: #{available}"
+    puts "#{wagon.type}, общее количество мест/объема: #{wagon.total_place}, доступно: #{wagon.used_place}"
   end
   end
   end

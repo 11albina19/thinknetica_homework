@@ -3,8 +3,9 @@ require_relative 'passenger_train'
 require_relative 'cargo_train'
 require_relative 'station'
 require_relative 'route'
-require_relative 'passenger_wagons'
-require_relative 'cargo_wagons'
+require_relative 'wagon'
+require_relative 'passenger_wagon'
+require_relative 'cargo_wagon'
 
 class RailRoad
   attr_reader :stations, :trains, :wagons, :routes
@@ -88,6 +89,12 @@ class RailRoad
           puts "Станция #{index.name}"
           index.show_trains
         end
+        puts "Все созданные вагоны:"
+        puts @wagons
+        puts "Все созданные поезда:"
+        puts @trains
+        puts "Все созданные маршруты:"
+        puts @routes
       when 4
         puts "Выполнение программы завершено."
         break
@@ -141,20 +148,26 @@ class RailRoad
     begin
       puts "Это пассажирский вагон? 1 - пассажирский, 2 - грузовой"
       wagon_type = gets.chomp.to_i
-      puts "Введите номер вагона"
-      wagon_number = gets.chomp.to_i
       if wagon_type == 1
         puts "Введите количество мест в вагоне"
-        all_seats = gets.chomp.to_i
-        wagon = PassengerWagons.new(wagon_number, all_seats)
-        @wagons << wagon
-        puts "Создан вагон " + wagon.number.to_s
+        total_place = gets.chomp.to_i
+        if total_place > 0
+          wagon = PassengerWagon.new(total_place)
+          @wagons << wagon
+          puts "Создан вагон " + wagon.to_s
+        else
+          puts "Ошибка при указании количества мест"
+        end
       elsif wagon_type == 2
         puts "Введите общий объем вагона"
-        all_volume = gets.chomp.to_i
-        wagon = CargoWagons.new(wagon_number, all_volume)
-        @wagons << wagon
-        puts "Создан вагон " + wagon.number.to_s
+        total_place = gets.chomp.to_i
+        if total_place > 0
+          wagon = CargoWagon.new(total_place)
+          @wagons << wagon
+          puts "Создан вагон " + wagon.to_s
+        else
+          puts "Ошибка при указании общего объема"
+        end
       else
         puts "Неверный тип вагона"
       end
@@ -264,9 +277,9 @@ def change_wagons
     return
   end
   if number == 1
-    trains[index_train].attach_wagons(wagons[index_wagons])
+    trains[index_train].attach_wagon(wagons[index_wagons])
   elsif number == 2
-    trains[index_train].unhook_wagons(wagons[index_wagons])
+    trains[index_train].unhook_wagon(wagons[index_wagons])
   end
 end
 
@@ -280,34 +293,34 @@ def occupy_seat_and_volume_wagons
     return
   end
   wagon = wagons[index_wagons]
-  if wagon.passenger == true
-    puts "Выбран пассажирский вагон под номером #{wagon.number}, ИНДЕКС #{index_wagons}"
-    puts "Общее количество мест в нем #{wagon.all_seats}, из них свободно #{wagon.show_available}"
+  if wagon.type == :passenger
+    puts "Выбран пассажирский вагон #{wagon.to_s}, ИНДЕКС #{index_wagons}"
+    puts "Общее количество мест в нем #{wagon.total_place}, из них свободно #{wagon.free_place}"
     puts "Нажмите 1 - занять место; 2 - освободить место"
     number_change = gets.chomp.to_i
     case number_change
     when 1
-      wagon.alter_seat_busy
+      wagon.take_place
     when 2
-      wagon.alter_seat_available
+      wagon.give_place
     end
-    puts "Действие завершено. Теперь свободных пассажирских мест #{wagon.show_available}, из общего количества занято #{wagon.show_busy}"
+    puts "Действие завершено. Теперь свободных пассажирских мест #{wagon.free_place}, из общего количества занято #{wagon.used_place}"
   else
-    puts "Выбран грузовой вагон под номером #{wagon.number}, ИНДЕКС #{index_wagons}"
-    puts "Общий объем в нем #{wagon.all_volume}, доступный объем #{wagon.show_available}"
+    puts "Выбран грузовой вагон #{wagon.to_s}, ИНДЕКС #{index_wagons}"
+    puts "Общий объем в нем #{wagon.total_place}, доступный объем #{wagon.free_place}"
     puts "Нажмите 1 - занять объем; 2 - освободить объем"
     number_change = gets.chomp.to_i
     case number_change
     when 1
       puts "Введите, какое количество объема необходимо занять"
       value = gets.chomp.to_i
-      wagon.alter_volume_busy(value)
+      wagon.take_place(value)
     when 2
       puts "Введите, какое количество объема необходимо освободить"
       value = gets.chomp.to_i
-      wagon.alter_volume_available(value)
+      wagon.give_place(value)
     end
-    puts "Действие завершено. Теперь доступный объем #{wagon.show_available}, из общего количества занято #{wagon.show_busy}"
+    puts "Действие завершено. Теперь доступный объем #{wagon.free_place}, из общего количества занято #{wagon.used_place}"
   end
 end
 
@@ -320,7 +333,7 @@ def print_wagons_list
   if train_selection_error
     return
   end
-  trains[index_train].print_wagons_list
+  trains[index_train].print_wagon_list
 end
 
 def print_trains_list
@@ -361,13 +374,13 @@ end
 
 def show_all_train
   trains.each_with_index do |train, index|
-    puts "Поезд #{train.name}, пассажирский: #{train.passenger.to_s}, ИНДЕКС #{index}"
+    puts "Поезд #{train.name}, тип: #{train.type.to_s}, ИНДЕКС #{index}"
   end
 end
 
 def show_all_wagons
   wagons.each_with_index do |wagon, index|
-    puts "Вагон #{wagon.number}, пассажирский: #{wagon.passenger.to_s}, ИНДЕКС #{index}"
+    puts "Вагон #{wagon.to_s}, тип: #{wagon.type.to_s}, ИНДЕКС #{index}"
   end
 end
 
