@@ -11,7 +11,6 @@ class Wagon
   def initialize(total_place)
     @total_place = total_place
     @used_place = 0
-    #puts self.class.validations.inspect
     validate!
   end
 

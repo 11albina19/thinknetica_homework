@@ -119,10 +119,6 @@ class Train
     route.stations[@index_station + 1]
   end
 
-  #def validate!
-  #  raise 'Input Error. Use letters and numbers in the format: XXX-XX/XXXXX' if @name !~ NAME_FORMAT
-  #end
-
   class << self
     def block_wagon
       lambda do |wagon|
